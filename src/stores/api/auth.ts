@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import useSWR,{type SWRResponse} from 'swr'
 import useSWRMutation, {type SWRMutationResponse} from 'swr/mutation'
 import {setCookies} from "@/helpers/cookies";
+import apiClient from "@/config/axios";
 
 
 
@@ -12,24 +12,17 @@ interface LoginStore {
     logout: () => void,
 }
 
-const loginStore = create<LoginStore>((set) => ({
+const authStore = create<LoginStore>((set) => ({
     isLogin: false,
-    login: (id) => useSWRMutation('https://dummyjson.com/auth/login', async (url, {arg}) => {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: 'kminchelle',
-                password: '0lelplR',
-            })
-        })
-        const data = await response.json()
+    login: (id) => useSWRMutation('/auth/login', async (url, {arg}) => {
+        const response = await apiClient.post(url, arg)
+        const data = await response.data
         setCookies('xx-access-token', data.token)
+        localStorage.setItem('user', JSON.stringify(data))
+        set({ isLogin: true })
         return data
     }),
     logout: () => set({ isLogin: false })
 }))
 
-export default loginStore
+export default authStore
