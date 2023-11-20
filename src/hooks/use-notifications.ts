@@ -1,41 +1,57 @@
-import { notifications } from '@mantine/notifications';
-import {NotificationProps} from "@mantine/core";
+import { NotificationData, notifications } from '@mantine/notifications'
+import { NotificationProps } from '@mantine/core'
 
 const useNotifications = () => {
-    const success = (message: string, c?: NotificationProps) => {
-        notifications.show({
-            title: 'Success',
-            message,
-            color: 'primary',
-            ...c,
-        });
-    };
-    const error = (message: string, c?: NotificationProps) => {
-        notifications.show({
-            title: 'Error',
-            message,
-            color: 'danger',
-            ...c,
-        });
-    };
-    const info = (message: string, c?: NotificationProps) => {
-        notifications.show({
-            title: 'Info',
-            message,
-            color: 'info',
-            ...c,
-        });
-    };
+  const success = (v: NotificationData | string, options?: NotificationProps) => {
+    if (typeof v === 'string') {
+      notifications.show({
+        title: 'Success',
+        message: v,
+        color: 'success',
+        ...options
+      })
+    } else {
+      notifications.show(v)
+    }
+  }
+  const error = (v: NotificationData | string, options?: NotificationData) => {
+    if (typeof v === 'string') {
+      notifications.show({
+        title: 'Error',
+        message: v,
+        color: 'danger',
+        ...options
+      })
+    } else {
+      notifications.show(v)
+    }
+  }
+  const info = (v: NotificationData | string, options?: NotificationData) => {
+    if (typeof v === 'string') {
+      notifications.show({
+        title: 'Info',
+        message: v,
+        color: 'info',
+        ...options
+      })
+    } else {
+      notifications.show(v)
+    }
+  }
 
-    const warning = (message: string, c?: NotificationProps) => {
-        notifications.show({
-            title: 'Warning',
-            message,
-            color: 'warning',
-            ...c,
-        });
-    };
-    return { success, error, info, warning };
-};
+  const warning = (v: NotificationData | string, options?: NotificationProps) => {
+    if (typeof v === 'string') {
+      notifications.show({
+        title: 'Warning',
+        message: v,
+        color: 'warning',
+        ...options
+      })
+    } else {
+      notifications.show(v)
+    }
+  }
+  return { success, error, info, warning }
+}
 
-export default useNotifications;
+export default useNotifications
